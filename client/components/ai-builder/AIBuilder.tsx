@@ -201,34 +201,14 @@ export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete
 
         {/* Input Section */}
         <div className="w-full max-w-2xl">
-          <div className="flex gap-3">
-            <Input
-              placeholder="Type your landing page description..."
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              disabled={isGenerating}
-              className="flex-1 h-12 px-4 rounded-lg border border-gray-200 focus:ring-valasys-orange focus:border-valasys-orange text-base"
-            />
-            <Button
-              onClick={handleGenerateLayout}
-              disabled={isGenerating || !prompt.trim()}
-              className={cn(
-                "h-12 px-6 rounded-lg font-semibold transition-all",
-                isGenerating || !prompt.trim()
-                  ? "bg-gray-200 text-gray-600 cursor-not-allowed"
-                  : "bg-valasys-orange hover:bg-valasys-orange/90 text-white shadow-md"
-              )}
-            >
-              {isGenerating ? (
-                <>
-                  <Loader className="w-4 h-4 mr-2 animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                "Create 4.0"
-              )}
-            </Button>
-          </div>
+          <Textarea
+            placeholder="Type your landing page description..."
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            disabled={isGenerating}
+            rows={3}
+            className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-valasys-orange focus:border-valasys-orange text-base resize-none"
+          />
         </div>
       </div>
     </DashboardLayout>

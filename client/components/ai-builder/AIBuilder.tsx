@@ -284,8 +284,19 @@ export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete
   // Chat View
   if (chatMessages.length > 0) {
     return (
-      <DashboardLayout>
-        <div className="flex h-screen overflow-hidden bg-white">
+      <>
+        <style>{`
+          body, html {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+          }
+          body::-webkit-scrollbar,
+          html::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+        <DashboardLayout>
+        <div className="flex h-screen overflow-hidden bg-white" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {/* Left Chat Sidebar */}
           <div className="w-96 border-r border-gray-200 flex flex-col bg-white">
             {/* Header */}
@@ -302,7 +313,7 @@ export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete
             </div>
 
             {/* Chat Messages */}
-            <div className="flex-1 overflow-y-auto space-y-2 p-2">
+            <div className="flex-1 overflow-y-auto space-y-2 p-2" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
               {chatMessages.map((message) => (
                 <div
                   key={message.id}
@@ -442,7 +453,7 @@ export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete
           </div>
 
           {/* Right Loader Section */}
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
             <div className="flex flex-col items-center gap-6">
               <div className="relative">
                 <div className="w-16 h-16 rounded-full border-4 border-gray-200"></div>
@@ -456,6 +467,7 @@ export const AIBuilder: React.FC<AIBuilderProps> = ({ onBack, onGenerateComplete
           </div>
         </div>
       </DashboardLayout>
+      </>
     );
   }
 

@@ -75,8 +75,8 @@ export const BuilderCanvas: React.FC<BuilderCanvasProps> = ({ onBack, templateId
             Back to Editor
           </button>
         </header>
-        <div className="flex-1 overflow-y-auto bg-gray-50 p-8">
-          <div className="max-w-5xl mx-auto space-y-4">
+        <div className="flex-1 overflow-y-auto bg-white p-8">
+          <div className="max-w-5xl mx-auto min-h-full rounded-xl border border-gray-200 bg-white p-6 space-y-4">
             {layout.map((comp) => (
               <ComponentRenderer
                 key={comp.id}

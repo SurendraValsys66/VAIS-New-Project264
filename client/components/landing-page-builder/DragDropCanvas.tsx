@@ -2,7 +2,6 @@ import React, { useCallback } from "react";
 import { useDrop } from "react-dnd";
 import { LandingPage, LandingPageBlock, DragItem } from "./types";
 import { DraggableBlock } from "./DraggableBlock";
-import { Trash2 } from "lucide-react";
 
 interface DragDropCanvasProps {
   page: LandingPage;
@@ -64,16 +63,12 @@ export const DragDropCanvas: React.FC<DragDropCanvasProps> = ({
     return (
       <div
         ref={dropRef}
-        className={`w-full bg-white rounded-lg shadow-md p-8 border-4 border-dashed transition-colors flex flex-col items-center justify-center min-h-64 ${
+        className={`w-full bg-white rounded-lg shadow-md px-8 py-6 border-4 border-dashed transition-colors flex flex-col items-center justify-center min-h-20 ${
           isOver ? "border-valasys-orange bg-orange-50" : "border-gray-300"
         }`}
       >
-        <Trash2 className="w-12 h-12 text-gray-400 mb-3" />
-        <p className="text-gray-600 text-center font-medium">
+        <p className="text-gray-500 text-center text-sm">
           Drag blocks from the sidebar to start building
-        </p>
-        <p className="text-gray-400 text-sm mt-2">
-          Or click "Sections" to add pre-built templates
         </p>
       </div>
     );

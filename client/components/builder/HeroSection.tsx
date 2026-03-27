@@ -28,6 +28,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 }) => {
   const [selectedElementId, setSelectedElementId] = React.useState<string | null>(null);
   const [hoveredElementId, setHoveredElementId] = React.useState<string | null>(null);
+  const [editingElementId, setEditingElementId] = React.useState<string | null>(null);
   const [clipboardData, setClipboardData] = React.useState<{ elementId: string; content: string } | null>(null);
 
   // Define hero elements
@@ -185,11 +186,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     );
 
     const renderControls = () => {
-      if (!isSelected) return null;
+      if (!isSelected || editingElementId === element.id) return null;
 
       return (
         <div
-          className="absolute top-1 right-1 flex items-center gap-1 bg-white rounded-md shadow-lg border border-valasys-orange/20 z-50 pointer-events-auto"
+          className="absolute top-1 right-1 flex items-center gap-1 bg-white rounded-md shadow-lg border border-valasys-orange/20 z-[100] pointer-events-auto"
           onMouseDown={(e) => e.stopPropagation()}
           onClick={(e) => e.stopPropagation()}
         >
@@ -244,23 +245,34 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         return (
           <div
             key={element.id}
-            className={cn(containerClasses, "relative")}
+            className={cn(
+              containerClasses,
+              "relative",
+              editingElementId && editingElementId !== element.id && "opacity-0 pointer-events-none transition-opacity"
+            )}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={() => handleElementClick(element.id)}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-valasys-orange/10 text-valasys-orange text-xs font-bold uppercase tracking-wider pointer-events-none">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-valasys-orange/10 text-valasys-orange text-xs font-bold uppercase tracking-wider">
               <span
                 contentEditable={isSelected}
                 suppressContentEditableWarning
                 onInput={(e) => {
+                  // Don't update state on input - just let the user type freely
+                }}
+                onFocus={() => setEditingElementId(element.id)}
+                onBlur={(e) => {
+                  setEditingElementId(null);
                   const text = e.currentTarget.textContent || "";
                   handleElementUpdate(element.id, text);
                 }}
                 onClick={(e) => {
                   if (isSelected) e.stopPropagation();
                 }}
-                className={isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : ""}
+                className={cn(
+                  isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : "pointer-events-none"
+                )}
               >
                 {element.content}
               </span>
@@ -282,6 +294,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               contentEditable={isSelected}
               suppressContentEditableWarning
               onInput={(e) => {
+                // Don't update state on input - just let the user type freely
+              }}
+              onFocus={() => setEditingElementId(element.id)}
+              onBlur={(e) => {
+                setEditingElementId(null);
                 const text = e.currentTarget.textContent || "";
                 handleElementUpdate(element.id, text);
               }}
@@ -290,7 +307,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               }}
               className={cn(
                 "text-4xl lg:text-6xl font-black text-gray-900 tracking-tight leading-none max-w-4xl",
-                isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : ""
+                isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : "pointer-events-none"
               )}
             >
               {element.content}
@@ -312,6 +329,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               contentEditable={isSelected}
               suppressContentEditableWarning
               onInput={(e) => {
+                // Don't update state on input - just let the user type freely
+              }}
+              onFocus={() => setEditingElementId(element.id)}
+              onBlur={(e) => {
+                setEditingElementId(null);
                 const text = e.currentTarget.textContent || "";
                 handleElementUpdate(element.id, text);
               }}
@@ -320,7 +342,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               }}
               className={cn(
                 "text-lg text-gray-600 max-w-2xl leading-relaxed",
-                isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : ""
+                isSelected ? "focus:outline-none focus:ring-0 pointer-events-auto" : "pointer-events-none"
               )}
             >
               {element.content}

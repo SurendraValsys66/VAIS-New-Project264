@@ -244,7 +244,7 @@ export const ComponentRenderer: React.FC<RendererProps> = ({
           component.type === "column" && "w-full md:w-auto h-full",
           isSelected
             ? "border-2 border-valasys-orange shadow-lg shadow-valasys-orange/20 element-selected-pulse"
-            : "border-2 border-transparent hover:border-valasys-orange hover:border-dashed",
+            : "border-2 border-transparent hover:border-2 hover:border-dashed hover:border-valasys-orange",
         )}
         style={{
           ...(component.type === "column"

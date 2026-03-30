@@ -15,6 +15,13 @@ export const useLayout = (initialData: BuilderComponent[] = []) => {
         height: ["section", "image", "card", "hero", "feature-grid", "pricing", "testimonials", "faq", "video"].includes(type) ? 200 : undefined,
         ...(type === "image" && { imageUrl: "" }),
         ...(type === "video" && { videoUrl: "" }),
+        ...(type === "hero" && {
+          heroHeadingText: "Build your vision faster than ever.",
+          heroDescriptionText: "The world's most advanced landing page builder. Drag, drop, and launch in minutes, not days.",
+          heroBadgeText: "✨ New Release",
+          heroPrimaryButtonText: "Start Free Trial",
+          heroSecondaryButtonText: "Watch Demo",
+        }),
       };
 
       // Call the onAdded callback with the new component ID

@@ -63,10 +63,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
   const getComponentStyles = () => {
     const styles: React.CSSProperties = {};
-    if (component.width) {
-      const unit = component.widthUnit || "%";
-      styles.width = `${component.width}${unit}`;
-    }
+    // Don't apply width to hero container - it should be full width
+    // Width adjustments should only affect internal elements, not the container
     if (component.height) {
       const unit = component.heightUnit || "px";
       styles.minHeight = `${component.height}${unit}`;
@@ -196,6 +194,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     const isSelected = selectedElementId === element.id;
     const isHovered = hoveredElementId === element.id;
 
+    // Get the actual value - in edit mode show the real value even if empty, in display mode show with fallback
+    const getDisplayContent = (elementId: string): string => {
+      const valueMap: Record<string, string | undefined> = {
+        badge: component.heroBadgeText,
+        heading: component.heroHeadingText,
+        paragraph: component.heroDescriptionText,
+      };
+      return valueMap[elementId] || "";
+    };
+
+    const getDefaultContent = (elementId: string): string => {
+      const defaults: Record<string, string> = {
+        badge: "✨ New Release",
+        heading: "Build your vision faster than ever.",
+        paragraph: "The world's most advanced landing page builder. Drag, drop, and launch in minutes, not days.",
+      };
+      return defaults[elementId] || "";
+    };
+
     const borderClasses = cn(
       "transition-all",
       isSelected && "border-2 border-solid border-valasys-orange",
@@ -265,6 +282,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
     switch (element.type) {
       case "badge":
+        const badgeContent = isSelected ? getDisplayContent("badge") : (element.content || getDefaultContent("badge"));
+        const badgeFontSize = component.badgeFontSize ? `${component.badgeFontSize}${component.badgeFontSizeUnit || "px"}` : undefined;
+        const badgeWidth = component.badgeWidth ? `${component.badgeWidth}${component.badgeWidthUnit || "%"}` : undefined;
         return (
           <div
             key={element.id}
@@ -276,17 +296,19 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onClick={() => handleElementClick(element.id)}
+            style={{ maxWidth: badgeWidth || "100%" }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-valasys-orange/10 text-valasys-orange text-xs font-bold uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-valasys-orange/10 text-valasys-orange font-bold uppercase tracking-wider" style={{ fontSize: badgeFontSize || "0.75rem" }}>
               {isSelected ? (
                 <Input
-                  value={element.content}
+                  value={badgeContent}
                   data-element-id={element.id}
                   onChange={(e) => handleElementUpdate(element.id, e.target.value)}
                   onFocus={handleEditableFocus}
                   onBlur={() => setEditingElementId(null)}
                   onClick={(e) => e.stopPropagation()}
-                  className="h-auto w-auto min-w-0 border-0 bg-transparent p-0 text-xs font-bold uppercase tracking-wider text-valasys-orange shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  className="h-auto w-auto min-w-0 border-0 bg-transparent p-0 font-bold uppercase tracking-wider text-valasys-orange shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                  style={{ fontSize: badgeFontSize || "0.75rem" }}
                 />
               ) : (
                 <span
@@ -296,9 +318,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                     wordWrap: "break-word",
                     overflowWrap: "break-word",
                     whiteSpace: "normal",
+                    fontSize: badgeFontSize || "0.75rem",
                   }}
                 >
-                  {element.content}
+                  {badgeContent}
                 </span>
               )}
             </div>
@@ -307,6 +330,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         );
 
       case "heading":
+        const headingContent = isSelected ? getDisplayContent("heading") : (element.content || getDefaultContent("heading"));
+        const headingWidth = component.headingWidth ? `${component.headingWidth}${component.headingWidthUnit || "%"}` : undefined;
+        const headingFontSize = component.headingFontSize ? `${component.headingFontSize}${component.headingFontSizeUnit || "px"}` : undefined;
         return (
           <div
             key={element.id}
@@ -318,7 +344,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {isSelected ? (
               <Textarea
                 ref={headingTextareaRef}
-                value={element.content}
+                value={headingContent}
                 data-element-id={element.id}
                 onChange={(e) => {
                   handleElementUpdate(element.id, e.target.value);
@@ -327,20 +353,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onFocus={handleEditableFocus}
                 onBlur={() => setEditingElementId(null)}
                 onClick={(e) => e.stopPropagation()}
-                className="min-h-0 resize-none overflow-hidden border-0 bg-transparent p-0 text-4xl lg:text-6xl font-black text-gray-900 tracking-tight leading-none max-w-4xl shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="min-h-0 resize-none overflow-hidden border-0 bg-transparent p-0 font-black text-gray-900 tracking-tight leading-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                style={{
+                  maxWidth: headingWidth || "100%",
+                  fontSize: headingFontSize || "3.75rem",
+                }}
                 rows={1}
               />
             ) : (
               <h1
-                className="text-4xl lg:text-6xl font-black text-gray-900 tracking-tight leading-none max-w-4xl break-words"
+                className="font-black text-gray-900 tracking-tight leading-none break-words"
                 style={{
                   direction: "ltr",
                   wordWrap: "break-word",
                   overflowWrap: "break-word",
                   whiteSpace: "normal",
+                  maxWidth: headingWidth || "100%",
+                  fontSize: headingFontSize || "3.75rem",
                 }}
               >
-                {element.content}
+                {headingContent}
               </h1>
             )}
             {renderControls()}
@@ -348,6 +380,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         );
 
       case "paragraph":
+        const paragraphContent = isSelected ? getDisplayContent("paragraph") : (element.content || getDefaultContent("paragraph"));
+        const paragraphWidth = component.paragraphWidth ? `${component.paragraphWidth}${component.paragraphWidthUnit || "%"}` : undefined;
+        const paragraphFontSize = component.paragraphFontSize ? `${component.paragraphFontSize}${component.paragraphFontSizeUnit || "px"}` : undefined;
         return (
           <div
             key={element.id}
@@ -359,7 +394,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             {isSelected ? (
               <Textarea
                 ref={paragraphTextareaRef}
-                value={element.content}
+                value={paragraphContent}
                 data-element-id={element.id}
                 onChange={(e) => {
                   handleElementUpdate(element.id, e.target.value);
@@ -368,20 +403,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 onFocus={handleEditableFocus}
                 onBlur={() => setEditingElementId(null)}
                 onClick={(e) => e.stopPropagation()}
-                className="min-h-0 resize-none overflow-hidden border-0 bg-transparent p-0 text-lg text-gray-600 max-w-2xl leading-relaxed shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="min-h-0 resize-none overflow-hidden border-0 bg-transparent p-0 text-gray-600 leading-relaxed shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                style={{
+                  maxWidth: paragraphWidth || "100%",
+                  fontSize: paragraphFontSize || "1.125rem",
+                }}
                 rows={1}
               />
             ) : (
               <p
-                className="text-lg text-gray-600 max-w-2xl leading-relaxed break-words"
+                className="text-gray-600 leading-relaxed break-words"
                 style={{
                   direction: "ltr",
                   wordWrap: "break-word",
                   overflowWrap: "break-word",
                   whiteSpace: "normal",
+                  maxWidth: paragraphWidth || "100%",
+                  fontSize: paragraphFontSize || "1.125rem",
                 }}
               >
-                {element.content}
+                {paragraphContent}
               </p>
             )}
             {renderControls()}
@@ -389,6 +430,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         );
 
       case "buttons":
+        const buttonsWidth = component.buttonWidth ? `${component.buttonWidth}${component.buttonWidthUnit || "%"}` : undefined;
+        const buttonFontSize = component.buttonFontSize ? `${component.buttonFontSize}${component.buttonFontSizeUnit || "px"}` : undefined;
         return (
           <div
             key={element.id}
@@ -397,15 +440,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             onMouseLeave={onMouseLeave}
             onClick={() => handleElementClick(element.id)}
           >
-            <div className="flex flex-wrap items-center justify-center gap-4 mt-4">
+            <div className="flex flex-wrap items-center justify-center gap-4 mt-4" style={{ maxWidth: buttonsWidth || "100%", fontSize: buttonFontSize || "1.125rem" }}>
               {isSelected ? (
                 <Input
-                  value={component.heroPrimaryButtonText || "Start Free Trial"}
+                  value={component.heroPrimaryButtonText}
                   data-element-id="primaryButton"
                   onChange={(e) => handleElementUpdate("primaryButton", e.target.value)}
                   onFocus={handleEditableFocus}
                   onBlur={() => setEditingElementId(null)}
                   onClick={(e) => e.stopPropagation()}
+                  placeholder="Start Free Trial"
                   className="h-auto min-w-[220px] rounded-2xl border-0 bg-valasys-orange px-10 py-7 text-center text-lg font-bold text-white shadow-xl focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               ) : (
@@ -415,12 +459,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               )}
               {isSelected ? (
                 <Input
-                  value={component.heroSecondaryButtonText || "Watch Demo"}
+                  value={component.heroSecondaryButtonText}
                   data-element-id="secondaryButton"
                   onChange={(e) => handleElementUpdate("secondaryButton", e.target.value)}
                   onFocus={handleEditableFocus}
                   onBlur={() => setEditingElementId(null)}
                   onClick={(e) => e.stopPropagation()}
+                  placeholder="Watch Demo"
                   className="h-auto min-w-[180px] rounded-2xl border border-gray-200 bg-white px-10 py-7 text-center text-lg font-bold text-gray-900 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               ) : (

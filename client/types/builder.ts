@@ -74,6 +74,23 @@ export interface BuilderComponent {
   heroDescriptionText?: string;
   heroPrimaryButtonText?: string;
   heroSecondaryButtonText?: string;
+  // Individual element styling for hero section
+  headingFontSize?: number;
+  headingFontSizeUnit?: "px" | "%";
+  headingWidth?: number;
+  headingWidthUnit?: "%" | "px";
+  paragraphFontSize?: number;
+  paragraphFontSizeUnit?: "px" | "%";
+  paragraphWidth?: number;
+  paragraphWidthUnit?: "%" | "px";
+  badgeFontSize?: number;
+  badgeFontSizeUnit?: "px" | "%";
+  badgeWidth?: number;
+  badgeWidthUnit?: "%" | "px";
+  buttonFontSize?: number;
+  buttonFontSizeUnit?: "px" | "%";
+  buttonWidth?: number;
+  buttonWidthUnit?: "%" | "px";
 }
 
 export const DRAG_TYPES = {

@@ -446,6 +446,11 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         key === "heroDescriptionText" ||
         key === "heroPrimaryButtonText" ||
         key === "heroSecondaryButtonText" ||
+        key === "featureIcon" ||
+        key === "featureTitle" ||
+        key === "featureDescription" ||
+        key === "featureGridHeading" ||
+        key === "featureGridDescription" ||
         key === "badgeWidth" ||
         key === "headingWidth" ||
         key === "paragraphWidth" ||
@@ -474,6 +479,11 @@ export const ElementStylePanel: React.FC<ElementStylePanelProps> = ({
         key === "heroDescriptionText" ||
         key === "heroPrimaryButtonText" ||
         key === "heroSecondaryButtonText" ||
+        key === "featureIcon" ||
+        key === "featureTitle" ||
+        key === "featureDescription" ||
+        key === "featureGridHeading" ||
+        key === "featureGridDescription" ||
         key === "badgeWidth" ||
         key === "badgeFontSize" ||
         key === "headingWidth" ||
